@@ -1,5 +1,7 @@
 # DigDeep — Claude Context
 @/home/ryanlee/digdeep-training/SHARED_CONTEXT.md
+@PLAN.md
+@SPRINT.md
 
 ---
 

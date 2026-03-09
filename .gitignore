@@ -1,3 +1,8 @@
+# Claude Code context files (local dev only)
+CLAUDE.md
+PLAN.md
+SPRINT.md
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

@@ -1,0 +1,5 @@
+opencv-python
+omegaconf
+onnxruntime
+PySide6
+numpy

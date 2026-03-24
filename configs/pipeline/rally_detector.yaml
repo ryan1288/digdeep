@@ -1,0 +1,5 @@
+conf_threshold: 0.5       # minimum ball detection confidence to count as visible
+median_window: 15         # rolling median filter width (frames, should be odd)
+rally_start_frames: 30    # consecutive visible frames required to open a rally
+rally_end_frames: 90      # consecutive absent frames required to close a rally
+min_rally_frames: 90      # segments shorter than this are discarded

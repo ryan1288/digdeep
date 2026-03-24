@@ -1,0 +1,4 @@
+input_h: 288
+input_w: 512
+seq_len: 9            # temporal stack length (must match model filename, e.g. seq9)
+conf_threshold: 0.5

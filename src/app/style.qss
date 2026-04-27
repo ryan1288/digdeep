@@ -1,0 +1,132 @@
+/* DigDeep global stylesheet — hex design tokens, no oklch */
+
+/* ── Base ───────────────────────────────────────────────── */
+QMainWindow, QWidget {
+    background-color: #1d1f24;
+    color: #f1f2f4;
+    font-family: "Inter";
+    font-size: 13px;
+}
+
+QStackedWidget {
+    background-color: #1d1f24;
+}
+
+/* ── Scrollbars ─────────────────────────────────────────── */
+QScrollBar:vertical {
+    background: #1d1f24;
+    width: 8px;
+    margin: 0;
+}
+QScrollBar::handle:vertical {
+    background: #52575f;
+    border-radius: 4px;
+    min-height: 20px;
+}
+QScrollBar::handle:vertical:hover {
+    background: #74797f;
+}
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical,
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+    height: 0;
+}
+QScrollBar:horizontal {
+    background: #1d1f24;
+    height: 8px;
+    margin: 0;
+}
+QScrollBar::handle:horizontal {
+    background: #52575f;
+    border-radius: 4px;
+    min-width: 20px;
+}
+QScrollBar::handle:horizontal:hover {
+    background: #74797f;
+}
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal,
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background: none;
+    width: 0;
+}
+
+/* ── Buttons (base — widgets override) ─────────────────── */
+QPushButton {
+    border: none;
+    border-radius: 7px;
+    padding: 7px 14px;
+    font-family: "Inter";
+    font-size: 13px;
+    font-weight: 500;
+}
+QPushButton:focus {
+    outline: none;
+}
+
+/* ── QSplitter ──────────────────────────────────────────── */
+QSplitter::handle {
+    background: #3f434b;
+    width: 1px;
+    height: 1px;
+}
+
+/* ── QSlider ────────────────────────────────────────────── */
+QSlider::groove:horizontal {
+    background: #32363d;
+    height: 4px;
+    border-radius: 2px;
+}
+QSlider::handle:horizontal {
+    background: #ec8a5e;
+    width: 12px;
+    height: 12px;
+    margin: -4px 0;
+    border-radius: 6px;
+}
+QSlider::sub-page:horizontal {
+    background: #ec8a5e;
+    border-radius: 2px;
+}
+
+/* ── QProgressBar ───────────────────────────────────────── */
+QProgressBar {
+    background: #22252a;
+    border: none;
+    border-radius: 3px;
+    height: 6px;
+    text-align: center;
+}
+QProgressBar::chunk {
+    background: #ec8a5e;
+    border-radius: 3px;
+}
+
+/* ── QLineEdit ──────────────────────────────────────────── */
+QLineEdit {
+    background: #22252a;
+    border: 1px solid #3f434b;
+    border-radius: 7px;
+    padding: 8px 12px;
+    color: #f1f2f4;
+    font-size: 12px;
+    font-family: "JetBrains Mono";
+}
+QLineEdit:focus {
+    border-color: #ec8a5e;
+}
+
+/* ── QLabel ─────────────────────────────────────────────── */
+QLabel {
+    background: transparent;
+    color: #f1f2f4;
+}
+
+/* ── Tooltip ────────────────────────────────────────────── */
+QToolTip {
+    background: #32363d;
+    color: #f1f2f4;
+    border: 1px solid #52575f;
+    border-radius: 5px;
+    padding: 4px 8px;
+    font-size: 12px;
+}

@@ -69,6 +69,7 @@ class AnalyticsPipelineWorker(PipelineWorker):
                 ],
                 "fps": fps,
                 "source_video": self._video_path,
+                "players": {},
             }
             with open(sidecar_path, "w") as fh:
                 json.dump(analytics, fh, indent=2)

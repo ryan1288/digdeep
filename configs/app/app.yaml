@@ -7,6 +7,8 @@ progress_update_interval: 100   # frames between QProgressBar updates
 output_suffix: "_rallies"
 ffmpeg_crf: 23
 ffmpeg_preset: "fast"
-# Ball model path — override with DIGDEEP_BALL_MODEL env var or set here.
-# Defaults to ~/digdeep-training/models/VballNetFastV1_seq9_grayscale_233_h288_w512.onnx
+# Model paths — override with env vars (DIGDEEP_BALL_MODEL, DIGDEEP_PLAYER_MODEL,
+# DIGDEEP_REID_MODEL) or set here. Null = use built-in defaults.
 ball_model_path: null
+player_model_path: null
+reid_model_path: null

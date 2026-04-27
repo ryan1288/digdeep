@@ -183,6 +183,9 @@ def main() -> None:
         fps,
         (width, height),
     )
+    if not writer.isOpened():
+        cap.release()
+        sys.exit(f"ERROR: cannot open output video: {out_path}")
 
     print(f"Processing {total} frames → {out_path}")
     frame_idx = 0

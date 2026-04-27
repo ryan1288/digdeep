@@ -93,11 +93,16 @@ class PipelineWorker(QThread):
 
                 result = subprocess.run(
                     [
-                        "ffmpeg", "-y",
-                        "-ss", f"{start:.3f}",
-                        "-t", f"{duration:.3f}",
-                        "-i", self._video_path,
-                        "-c", "copy",
+                        "ffmpeg",
+                        "-y",
+                        "-ss",
+                        f"{start:.3f}",
+                        "-t",
+                        f"{duration:.3f}",
+                        "-i",
+                        self._video_path,
+                        "-c",
+                        "copy",
                         seg_path,
                     ],
                     capture_output=True,
@@ -117,11 +122,16 @@ class PipelineWorker(QThread):
 
             result = subprocess.run(
                 [
-                    "ffmpeg", "-y",
-                    "-f", "concat",
-                    "-safe", "0",
-                    "-i", list_path,
-                    "-c", "copy",
+                    "ffmpeg",
+                    "-y",
+                    "-f",
+                    "concat",
+                    "-safe",
+                    "0",
+                    "-i",
+                    list_path,
+                    "-c",
+                    "copy",
                     output_path,
                 ],
                 capture_output=True,

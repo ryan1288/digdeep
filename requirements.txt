@@ -3,3 +3,5 @@ omegaconf
 onnxruntime
 PySide6
 numpy
+torch
+boxmot

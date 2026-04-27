@@ -110,7 +110,122 @@ def _draw_ball(frame: np.ndarray, detections: List[dict]) -> np.ndarray:
 
 
 def main() -> None:
-    pass  # implemented in Task 3
+    parser = argparse.ArgumentParser(
+        description="Visualise ball + player tracking on a rally clip."
+    )
+    parser.add_argument("video", help="Path to input video file")
+    parser.add_argument(
+        "--out", default=None, help="Output video path (default: <stem>_tracked.mp4)"
+    )
+    parser.add_argument("--show", action="store_true", help="Show live preview window")
+    parser.add_argument(
+        "--conf", type=float, default=0.5, help="Detection confidence threshold"
+    )
+    args = parser.parse_args()
+
+    video_path = str(Path(args.video).expanduser().resolve())
+    if not Path(video_path).exists():
+        sys.exit(f"ERROR: video not found: {video_path}")
+
+    out_path = args.out or str(
+        Path(video_path).with_name(Path(video_path).stem + "_tracked.mp4")
+    )
+
+    # ── Build module configs ──────────────────────────────────────────────────
+    ball_model_path = os.environ.get("DIGDEEP_BALL_MODEL") or str(
+        Path.home()
+        / "digdeep-training"
+        / "models"
+        / "VballNetFastV1_seq9_grayscale_233_h288_w512.onnx"
+    )
+    ball_cfg = OmegaConf.create(
+        {
+            "model_path": ball_model_path,
+            "input_h": 288,
+            "input_w": 512,
+            "seq_len": 9,
+            "conf_threshold": args.conf,
+        }
+    )
+    player_cfg = OmegaConf.create(
+        {
+            "model_path": _resolve_player_model(None),
+            "resolution": 560,
+            "conf_threshold": args.conf,
+        }
+    )
+    tracker_cfg = OmegaConf.create(
+        {
+            "reid_weights_path": _resolve_reid_model(None),
+            "lost_buffer": 200,
+        }
+    )
+
+    # ── Initialise modules ────────────────────────────────────────────────────
+    print("Loading models...")
+    ball_detector = BallDetector(ball_cfg)
+    player_detector = PlayerDetector(player_cfg)
+    player_tracker = PlayerTracker(tracker_cfg)
+
+    # ── Open video ────────────────────────────────────────────────────────────
+    cap = cv2.VideoCapture(video_path)
+    if not cap.isOpened():
+        sys.exit(f"ERROR: cannot open video: {video_path}")
+
+    fps = cap.get(cv2.CAP_PROP_FPS) or 30.0
+    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+
+    writer = cv2.VideoWriter(
+        out_path,
+        cv2.VideoWriter_fourcc(*"mp4v"),
+        fps,
+        (width, height),
+    )
+
+    print(f"Processing {total} frames → {out_path}")
+    frame_idx = 0
+
+    try:
+        while True:
+            ret, frame = cap.read()
+            if not ret:
+                break
+
+            fr = FrameResult(
+                frame_idx=frame_idx,
+                frame=frame,
+                timestamp_ms=frame_idx * 1000.0 / fps,
+            )
+            fr = ball_detector.process(fr)
+            fr = player_detector.process(fr)
+            fr = player_tracker.process(fr)
+
+            annotated = frame.copy()
+            if fr.player_detections:
+                annotated = _draw_players(annotated, fr.player_detections)
+            if fr.ball_detections:
+                annotated = _draw_ball(annotated, fr.ball_detections)
+
+            writer.write(annotated)
+
+            if args.show:
+                cv2.imshow("tracking", annotated)
+                if cv2.waitKey(1) & 0xFF == ord("q"):
+                    break
+
+            if frame_idx % 100 == 0:
+                print(f"  frame {frame_idx}/{total}")
+
+            frame_idx += 1
+    finally:
+        cap.release()
+        writer.release()
+        if args.show:
+            cv2.destroyAllWindows()
+
+    print(f"Done. Wrote {frame_idx} frames to {out_path}")
 
 
 if __name__ == "__main__":

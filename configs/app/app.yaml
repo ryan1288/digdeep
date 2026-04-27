@@ -1,6 +1,8 @@
 title: "DigDeep — Rally Extractor"
-window_width: 800
-window_height: 400
+window_width: 1400
+window_height: 900
+window_min_width: 1100
+window_min_height: 700
 progress_update_interval: 100   # frames between QProgressBar updates
 output_suffix: "_rallies"
 ffmpeg_crf: 23

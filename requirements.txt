@@ -1,7 +1,16 @@
-opencv-python
-omegaconf
-onnxruntime
-PySide6
-numpy
-torch
-boxmot
+# DigDeep — inference app dependencies (Python 3.11)
+# Install: pip install -r requirements.txt
+# Note: torch is a transitive dependency of boxmot (ReID). The app itself
+# uses ONNX Runtime for all model inference; torch is not imported directly.
+# NOTE: boxmot is licensed AGPL-3.0. The inference app bundles it for ReID
+# tracking only. Review AGPL obligations before distributing the app.
+
+opencv-python>=4.8.0
+omegaconf>=2.3.0
+onnxruntime>=1.18.0
+PySide6>=6.6.0
+numpy>=1.24.0,<2.0.0
+boxmot>=10.0.0
+huggingface-hub>=0.19.0
+# torch required by boxmot for ReID feature extraction — not used directly
+torch>=2.0.0

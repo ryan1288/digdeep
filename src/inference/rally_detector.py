@@ -7,6 +7,7 @@ from omegaconf import DictConfig
 
 from src.pipeline.base import PipelineModule
 from src.pipeline.frame_result import FrameResult
+from src.pipeline.rally_utils import extract_rally_segments
 
 
 class RallyDetector(PipelineModule):
@@ -155,26 +156,5 @@ class RallyDetector(PipelineModule):
         Returns:
             Filtered list of (start_frame_idx, end_frame_idx) tuples.
         """
-        rallies: List[Tuple[int, int]] = []
-        in_seg = False
-        seg_start = 0
-
-        for i, state in enumerate(states):
-            if state == "in_rally" and not in_seg:
-                in_seg = True
-                seg_start = frames[i].frame_idx
-            elif state != "in_rally" and in_seg:
-                in_seg = False
-                seg_end = frames[i - 1].frame_idx
-                length = seg_end - seg_start + 1
-                if length >= self._min_rally_frames:
-                    rallies.append((seg_start, seg_end))
-
-        # Close any segment still open at end of stream.
-        if in_seg:
-            seg_end = frames[-1].frame_idx
-            length = seg_end - seg_start + 1
-            if length >= self._min_rally_frames:
-                rallies.append((seg_start, seg_end))
-
-        return rallies
+        pairs = [(fr.frame_idx, state) for fr, state in zip(frames, states)]
+        return extract_rally_segments(pairs, self._min_rally_frames)

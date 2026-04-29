@@ -1,0 +1,6 @@
+# Player detector inference configuration.
+# model_path is resolved at runtime: env DIGDEEP_PLAYER_MODEL →
+# cfg override → ~/.cache/digdeep/models/ → ~/digdeep-training dev path.
+model_path: null          # set via env var or cfg override
+resolution: 560           # RF-DETR input resolution in pixels
+conf_threshold: 0.5       # minimum detection confidence

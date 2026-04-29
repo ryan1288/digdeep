@@ -8,6 +8,7 @@ from omegaconf import DictConfig
 
 from src.pipeline.base import PipelineModule
 from src.pipeline.frame_result import FrameResult
+from src.pipeline.rally_utils import extract_rally_segments
 
 ACTION_LABELS = ("serve", "receive", "set", "attack", "block")
 
@@ -117,23 +118,8 @@ class AnalyticsAggregator(PipelineModule):
         Returns:
             List of rally dicts: [{"start_frame", "end_frame", "duration_sec"}, ...]
         """
-        rallies: List[Dict[str, Any]] = []
-        in_seg = False
-        seg_start_idx = 0
-
-        for i, fr in enumerate(frames):
-            if fr.rally_state == "in_rally" and not in_seg:
-                in_seg = True
-                seg_start_idx = fr.frame_idx
-            elif fr.rally_state != "in_rally" and in_seg:
-                in_seg = False
-                seg_end_idx = frames[i - 1].frame_idx
-                rallies.append(_rally_entry(seg_start_idx, seg_end_idx, self._fps))
-
-        if in_seg:
-            rallies.append(_rally_entry(seg_start_idx, frames[-1].frame_idx, self._fps))
-
-        return rallies
+        pairs = [(fr.frame_idx, fr.rally_state or "dead_ball") for fr in frames]
+        return [_rally_entry(s, e, self._fps) for s, e in extract_rally_segments(pairs)]
 
 
 # ---------------------------------------------------------------------------
